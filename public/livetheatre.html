@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theatre Chat</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://theatrechat.herokuapp.com/css/theatreChat.css?v=0.0.1">
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+    
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+    <script>
+        let backend = 'https://theatrechat.herokuapp.com'
+        var socket = io(backend);
+        var userName = null;
+        var chatState = true;
+        var betState = false;
+        var loggedIn = false;
+        let dateCountdown;
+        let pollCountdown;
+        let countdownTimer;
+        let player;
+
+        function pollTimer() {
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = pollCountdown - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            var timer = document.getElementById("timer");
+            //If it isn't "undefined" and it isn't "null", then it exists.
+            if (typeof (timer) != 'undefined' && timer != null) {
+                document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+
+                // If the count down is finished, write some text 
+                if (distance < 0) {
+                    clearInterval(countdownTimer);
+                    document.getElementById("timer").innerHTML = "EXPIRED";
+                }
+            }
+
+        }
+
+    </script>
+    <script src="https://theatrechat.herokuapp.com/js/chat.js"></script>
+    <script src="https://theatrechat.herokuapp.com/js/bets.js"></script>
+    <script src="https://theatrechat.herokuapp.com/js/votes.js"></script>
+</head>
+<body>
+    <header>
+        <div id="left-nav" class="hide">
+            <a href="https://live.harkat.in" class="button">Live</a>
+            <a href="https://live.harkat.in"><img src="./img/icons/powericon_default.png" alt="Power button"></a>
+            <a href="https://harkat.in/donate" id="donate"><img src="./img/icons/donate_default.png" alt="Donate to harkat"></a>
+        </div>
+        <div id="logo">
+            <img src="./img/logo_black_200px.png" alt="Harkat Logo">
+        </div>
+    </header>
+
+    <div id="offlineBanner" class="hide">STAY TUNED, WE WILL BE BACK SOON</div>
+    <div id="twitch-embed" class="hide"></div>
+    
+    <form id="chatBox" class="hide chat-container">
+        <div id="messages"></div><div>&nbsp;</div>
+        <input type="text" name="message" id="message" placeholder="Your message here" maxlength="280" />
+        <button id="collapseChat" type="button" name="toggleChat">&or;</button>
+        <button id="send" name="sendChat" type="submit">Send</button>
+    </form>
+
+    <div class="top-main-wrap" id="loginWrap">
+        <h3>Now Showing : <span id="showTitle">Title of the show</span></h3>
+        <div id="showDescription">There will be a description here.</div>
+        <form id="loginBox">
+            <h3>Time Until Show</h3>
+            <b id="showTimer"></b>
+        </form>
+    </div>
+
+    <div id="userEnter" class="hide">* Someone entered the theatre *</div>
+
+    <div id="help" class="hide">
+        <h3>HELP</h3>
+        <p>If you've clicked on this, you surely need help. The below pointers might help:</p> 
+        <ul>
+            <li>If you are unable to see the video stream, it might help to refresh the page.</li>
+            <li>Actually, for every issue, it might help to refresh the page.</li>
+            <li>The system is best accessed on google chrome and is optimised for a desktop experience. </li>
+            <li>If you double click on the video, it will become full screen.</li>
+            <li>In case you have any trouble with access, you can email us on shows@harkat.in or whatsapp +91-81047 52001</li>
+        </ul>
+        <p>P.S.: This is beta system in development and we love people giving us new ideas and pointing out errors. Be nice, but write in. </p>
+        <a href="#" id="helpClose" class="button">x</a>
+    </div>
+
+    <script>
+        let options = {
+            width: "100%",
+            height: "100%",
+            channel: "harkatstudios",
+            parent: ["localhost", "live.harkat.in", "theatrechat.herokuapp.com"],
+            controls: false,
+            allowfullscreen: true,
+            autoplay: true,
+            muted: false,
+        };
+
+        function initiate() {
+            player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+            player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+            player.removeEventListener(Twitch.Player.READY, initiate);
+        }
+
+        function handleOnline() {
+            if (loggedIn) {
+                document.getElementById("twitch-embed").classList.remove('hide');
+                document.getElementById("offlineBanner").classList.add('hide');
+                player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+                player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+                player.setMuted(false);
+            }
+        }
+
+        function handleOffline() {
+            if (loggedIn) {
+                document.getElementById("twitch-embed").classList.add('hide');
+                document.getElementById("offlineBanner").classList.remove('hide');
+                player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+                player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+                player.setMuted(true);
+            }
+        }
+    </script>
+</body>
+</html>

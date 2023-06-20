@@ -1,0 +1,202 @@
+* {
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+
+/*video {
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    transform: translateX(-50%) translateY(-50%);
+    background-size: cover;
+  }*/
+
+body {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+.logo {
+  margin: auto;
+  margin-top: auto;
+  border: none;
+  width: 100px;
+  height: 227px;
+  grid-column: 2;
+}
+
+img#logo {
+  padding-top: 200%;
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper {
+  width: 85vw;
+  height: 85vh;
+  border: solid thin white;
+  margin: auto;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+  margin-right: 0;
+  margin-left: 0;
+  opacity: 0.7;
+}
+
+.wrap {
+
+}
+
+.container {
+  border: none;
+  width: 75vw;
+  height: 75vh;
+  margin: auto;
+  margin-top: 5vh;
+}
+
+.home {
+  cursor: pointer;
+}
+
+.about {
+  cursor: pointer;
+}
+
+.show {
+  margin-top: 2vh;
+  cursor: pointer;
+}
+
+.talk {
+  cursor: pointer;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+  font-family: 'Tomorrow', sans-serif;
+  font-size: 20px;
+}
+
+a:hover{
+  color: #ade2e6;
+  text-decoration: none;
+}
+
+#home {
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  position: absolute;
+  top: 50%;
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+
+#about {
+  transform: rotate(90deg);
+  transform-origin: 50% 50%;
+  position: absolute;
+  top: 50%;
+  margin-left: 1vw;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: none;
+  opacity: 0.5;
+  margin: 10vh auto; /* 15% from the top and centered */
+  padding: 1vw;
+  border: solid thin white;
+  width: 80vw; /* Could be more or less, depending on screen size */
+  height: 75vh;
+  color: white;
+  overflow: scroll;
+}
+
+h5 {
+  font-family: "Lato";
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.text-content {
+  margin-left: 10vw;
+  margin-right: 10vw;
+  font-family: "Lato";
+  font-size: 17px;
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+}
+
+.close:hover,
+.close:focus {
+  color: lightblue;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#iframe {
+  border: none;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+#iframe2 {
+  border: none;
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+
+@media only screen and (max-width: 600px) {
+
+  a {
+    font-size: 10px;
+  }
+
+  #home {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    position: absolute;
+    top: 50%;
+    margin-left: 0;
+    margin-right: 0.5vw;
+  }
+
+  #about {
+    transform: rotate(90deg);
+    transform-origin: 50% 50%;
+    position: absolute;
+    top: 50%;
+    margin-left: 0;
+  }
+
+}

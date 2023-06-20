@@ -1,0 +1,458 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    font-family: 'Source Code Pro', monospace;
+}
+
+iframe {
+    position: absolute;
+    z-index: -2;
+}
+
+.hide {
+    opacity: 0;
+    transition: opacity .6s;
+    display: none;
+    visibility: hidden;
+}
+
+button,
+a.button {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    border: solid thin white;
+    padding: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+}
+
+button:hover,
+a.button:hover {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
+
+#left-nav a:hover {
+    filter: invert(100%);
+}
+
+#left-nav {
+    display: grid;
+    position: fixed;
+    top: 0;
+    left: 1rem;
+    padding: 1rem;
+    text-align: center;
+    z-index: 500;
+}
+
+#left-nav .button {
+    margin-bottom: 1rem;
+}
+
+#left-nav img {
+    width: 5vw;
+}
+
+#logo {
+    position: fixed;
+    top: 0;
+    right: 1rem;
+    text-align: right;
+}
+
+#logo img {
+    background-color: #fff;
+    width: 5vw;
+}
+
+#userEnter {
+    padding: 1rem;
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+}
+
+#loginWrap {
+    display: grid;
+    place-items: center;
+}
+
+#loginWrap * {
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 60vw;
+}
+
+#loginWrap h3, #help h3 {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+#loginBox {
+    display: grid;
+    font-weight: bolder;
+    place-items: center;
+}
+
+#loginBox input {
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+#loginBox #showTimer {
+    font-size: 1.5rem;
+}
+
+#loginHelp {
+    border: #fff solid;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+#loginHelp b {
+    font-size: larger;
+    font-weight: 900;
+}
+
+#loginHelp ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#loginHelp li {
+    margin-bottom: 0;
+}
+
+#help {
+    background-color: #000;
+    position: absolute;
+    left: 50%;
+    padding: 2rem;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+#helpClose {
+    text-align: right;
+    right: 0;
+    top: 1rem;
+    position: absolute;
+}
+
+div.controls {
+    padding: 10px;
+    opacity: 0.5;
+    background-color: rgb(0, 0, 0, 0);
+    z-index: 0;
+    position: relative;
+    float: left;
+}
+
+#chatBox {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+}
+
+.chat-container {
+    display: grid;
+    grid-template-columns: 1.7fr 0.1fr 0.2fr;
+    grid-template-rows: 1.8fr 0.2fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        ". . ."
+        ". . .";
+    width: 60%;
+    z-index: 10;
+}
+
+#chatBox input {
+    color: rgb(0, 0, 0);
+    grid-column: 1 / 2;
+}
+
+#chatBox button {
+    border: none;
+    display: inline;
+    font-size: 18px;
+    margin: 0;
+    padding: 5px;
+    width: 40px;
+}
+
+#chatBox button:hover {
+    filter: invert(100%);
+}
+
+#collapseChat {
+    background-image: url("../img/icons/chat_mobile_default.png");
+    background-repeat: no-repeat, repeat;
+    background-position-y: center;
+    background-size: cover;
+}
+
+#send {
+    background-image: url("../img/icons/mobile_sendbutton_default.png");
+    background-repeat: no-repeat, repeat;
+    background-size: contain;
+    background-position-x: center;
+    color: transparent;
+}
+
+#messages {
+    background-color: rgba(50, 50, 50, 0.65);
+    grid-column: 1 / 3;
+    min-height: 10vh;
+    max-height: 18vh;
+    width: 100%;
+    overflow-y: auto;
+}
+
+#messages p {
+    margin: 0 1.2rem;
+    font-style: normal;
+    font-weight: 100;
+}
+
+#messages b {
+    color: #878787;
+    font-weight: 900;
+}
+
+#messages a,
+#messages a:active,
+#messages a:visited {
+    color: lightgray;
+}
+
+#votingBox {
+    position: fixed;
+    top: 20vh;
+    width: 100%;
+}
+
+#voteContainer {
+    background-color: rgba(50, 50, 50, 0.85);
+    display: grid;
+    margin: 0 auto;
+    width: 80vw;
+}
+
+#voteContainer * {
+    text-align: center;
+}
+
+#voteContainer h4 {
+    font-size: 2rem;
+}
+
+#voteContainer button {
+    margin-bottom: 1rem;
+}
+
+#betsBox {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    top: 10vh;
+    min-height: 60vh;
+    width: 100%;
+}
+
+#betsBox span {
+    font-size: 2rem;
+    display: inline-flex;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    width: 50%;
+}
+
+#betsBox h4 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#betOptions,
+#betResults {
+    display: flex;
+    justify-content: center;
+}
+
+#betResults {
+    width: 100%;
+}
+
+#betOptions div {
+    margin: 10px;
+    min-width: 270px;
+    text-align: center;
+}
+
+#betOptions img {
+    height: 40vh;
+}
+
+#betResults div {
+    background-color: #000;
+    font-size: 2rem;
+    min-width: 270px;
+    text-align: center;
+}
+
+#betsBox button {
+    background-color: rgb(0, 0, 0);
+    padding: 10px;
+    margin: 10px;
+    width: 80%;
+}
+
+#betsBox button:hover {
+    background-color: #fff;
+    color: rgb(0, 0, 0);
+}
+
+#votingBox #timer {
+    padding: 15px 0;
+}
+
+#offlineBanner {
+    font-size: 34pt;
+    position: fixed;
+    top: 50vh;
+    width: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+#hamburgerLinks {
+    display: none;
+    margin-left: 6rem;
+    margin-top: 0.5rem;
+}
+
+/* Style navigation menu links */
+#hamburgerLinks a {
+    background-color: rgba(50, 50, 50, 0.95);
+    color: white;
+    padding: 0.4em 1rem;
+    text-decoration: none;
+    display: block;
+}
+
+/* Add a grey background color on mouse-over */
+#hamburgerLinks a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+/* Style the hamburger menu */
+#openHamburger {
+    background-color: rgba(50, 50, 50, 0.65);
+    display: block;
+    width: 2rem;
+}
+
+#infoBox {
+    position: fixed;
+    width: 100%;
+}
+
+#infoContainer {
+    background-color: rgba(50, 50, 50, 0.85);
+    display: grid;
+    margin: 0 auto;
+    width: 80vw;
+}
+
+#infoContainer * {
+    text-align: center;
+    color: #fff;
+}
+
+#infoContainer h4 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 1025px) {
+
+    #help {
+        max-height: 50vh;
+        width: 35vw;
+        transform: translate(-50%, -50%);
+    }
+
+    #chatBox {
+        right: inherit;
+        left: 50%;
+        transform: translate(-50%, 0);
+        -ms-transform: translate(-50%, 0);
+    }
+
+    #voteContainer {
+        width: 35vw;
+    }
+
+    #left-nav {
+        left: 1rem;
+    }
+
+    #logo {
+        right: 1rem;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    #loginWrap h3 {
+        font-size: 1.2rem;
+    }
+
+    #help {
+        max-height: 75vh;
+    }
+}
+
+/*Mdm Smart Phones v2*/
+@media screen and (max-width: 667px) {
+    #loginWrap * {
+        width: 85vw;
+    }
+
+    #help {
+        font-size: 14pt;
+        max-height: 50vh;
+        width: 80vw;
+    }
+
+    #left-nav {
+        left: 0;
+    }
+
+    #left-nav .button {
+        font-size: 0.5rem;
+    }
+
+    #left-nav img {
+        width: 10vw;
+    }
+}

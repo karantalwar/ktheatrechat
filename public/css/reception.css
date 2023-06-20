@@ -1,0 +1,53 @@
+
+
+.reception  h1,h2,h3,h4,h5,a{
+  color: white !important;
+}
+
+input {
+  width: 70%;
+  height: auto;
+  padding: 10px;
+  background: transparent;
+  border: solid thin white;
+  color: white;
+}
+
+section button {
+  width: 70%;
+  height: 10%;
+  background-color: transparent;
+  color: white;
+  border: solid thin white;
+  padding: 10px;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+.reception2 {
+  text-decoration: underline;
+  font-style: italic;
+}
+
+#chai {
+  width: 50%;
+}
+
+.margin {
+  color: white;
+  font-size: 15px;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.enter {
+  display: none;	
+}
+
+	
+.hide {
+
+}

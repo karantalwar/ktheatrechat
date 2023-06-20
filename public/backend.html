@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theatre Chat - Backend</title>
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+    <style>
+        html {
+            background-color: rgb(0,0,0);
+            color: #fff;
+        }
+        
+        #messages {
+            margin-bottom:1em;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        #messages b, #messages p {
+            margin: 0 1em;
+            padding: 0;
+        }
+
+        #showDescription {
+            width: 60%;
+        }
+        span.voteLable {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div style="right: 10px; position: absolute; width: 20%;">
+    <button id="startBets" onclick="startBets();">Start Bets</button>
+    <button id="stopBets" onclick="stopBets();">Stop Bets</button>
+    <br/><br/>
+    <button id="resetBets" onclick="socket.emit('resetBets', true); getBets();">Reset All Bets</button>
+    <div id="betsBox"></div>
+</div>
+
+<div style="right: 10px; position: absolute; width: 20%; top: 200px;">
+    <input type="text" name="voteOptionName" id="voteOptionName" placeholder="Set a new option name">
+    <button id="startVoting" onclick="addVoteListener()">Add Vote Option</button>
+    <button id="startVoting" onclick="startVoting()">Start Voting</button>
+    <button id="stopVoting" onclick="stopVoting()">Stop Voting</button>
+    <br/><br/>
+    <button id="resetVotes" onclick="socket.emit('resetVotes', true); getVotes();">Reset All Votes</button>
+    <div id="votesBox"></div>
+</div>
+
+<div style="right: 10px; position: absolute; width: 20%; top: 500px;">
+    <button onclick="socket.emit('showInfoBox', true);">Show Info Box</button>
+    <button onclick="socket.emit('hideInfoBox', true);">Hide Info Box</button>
+    <h3>Active users</h3>
+    <div id="activeUserList"></div>
+</div>
+
+<div style="display: block; width: 80%; margin-bottom: 1rem;">
+    <input type="text" name="showTitle" id="showTitle" placeholder="Set a new title">
+    <input type="text" name="showDescription" id="showDescription" placeholder="Set a new showDescription" maxlength="300">
+    <input type="text" name="showDate" id="showDate" placeholder="Set a new show Date" maxlength="300">
+    <button onclick="setShowDetails()">Change Show Details</button>
+</div>
+<div style="display: block; width: 80%; margin-bottom: 1rem;">
+    <input type="text" name="viewerPassword" id="viewerPassword" placeholder="Set new password">
+    <button onclick="setViewerPassword()">Set Password</button>
+</div>
+<div style="display: block; width: 75vw; max-height: 75vh;">
+    <input type="text" name="offlineText" id="offlineText" placeholder="Text for offline screen">
+    <button id="sendOfflineText" onclick="offlineText()">
+        Send
+    </button>
+
+    <h4>Chat messages</h4>
+    <div id="messages" style="font-size: 24px;"></div>
+    <button id="clearChats" onclick="socket.emit('clearChats', true)">Clear Out Chats</button>
+</div>
+
+<script>
+    var socket = io();
+    var userName = null;
+    var chatState = true;
+    var betState = false;
+    $(() => {
+            getShowDetails();
+            getMessages();
+            getBets();
+            getVotes();
+        })
+
+    socket.on('message', (args)=>{
+        addMessages(args)
+        getActiveUsers()
+    })
+
+    socket.on('showBets', getBets)
+
+    function addMessages(message) {
+        if (message != null) {
+            const messageBox = document.createElement('div')
+            messageBox.innerHTML = `<b> ${message.name} </b> <p> ${message.message} </p>`
+            document.getElementById('messages').append(messageBox)
+        }
+        document.getElementById('messages').scrollTo(0, document.getElementById('messages').scrollHeight);
+    }
+
+    function getMessages() {
+        getActiveUsers()
+        $.get('/messages', (data) => {
+            data.forEach(addMessages);
+            // console.log(data.messages);
+        })
+    }
+
+    function addActiveUsers(userRow) {
+            if (userRow != null) {
+                const userElement = document.createElement('div')
+                let checkBox = document.createElement('input')
+                checkBox.setAttribute('type', 'checkbox')
+                checkBox.setAttribute('name', 'mute-' + userRow.name)
+                if (userRow.muted) {
+                    // Enable checkbox for users that have been muted
+                    checkBox.setAttribute('checked', 'checked')
+                }
+                checkBox.addEventListener('change', function() {
+                    if (this.checked) {
+                        muteUser(userRow.name, true)
+                    } else {
+                        muteUser(userRow.name, false)
+                    }
+                })
+                userElement.append(checkBox)
+                let userLabel = document.createElement('label')
+                userLabel.setAttribute('for', 'mute-' + userRow.name)
+                userLabel.textContent = userRow.name
+                userElement.append(userLabel)
+                document.getElementById('activeUserList').append(userElement)
+            }
+        }
+
+    function getActiveUsers() {
+        document.getElementById('activeUserList').innerHTML = '';
+        $.get('/activeUsers', (data) => {
+            data.forEach(addActiveUsers);
+        })
+    }
+
+    function muteUser(name, muteStatus) {
+        $.post('/muteUser', {name: name, mute: muteStatus})
+    }
+
+    function startBets() {
+        console.log("Starting bets")
+        socket.emit("startBets", true)
+    }
+
+    function stopBets() {
+        console.log("Stopping bets")
+        socket.emit("stopBets", true)
+    }
+
+    function getBets() {
+        let betsBox = document.getElementById('betsBox')
+        betsBox.innerHTML = ''
+        $.get('/bets', (data) => {
+            let betHeading = document.createElement('h4')
+            betHeading.textContent = 'Current votes';
+            betsBox.append(betHeading)
+            Object.entries(data).forEach(([key, value]) => {
+                if (key != 'visible') {
+                    const betElement = document.createElement('div')
+                    const betLabel = document.createElement('span')
+                    betLabel.classList.add('betLabel')
+                    betLabel.textContent = value.option
+                    betLabel.dataset.oldname = value.option
+                    // Click this to change it to a input
+                    betLabel.addEventListener('keyup', betOptionLabelListener)
+                    betLabel.setAttribute('contenteditable', 'true')
+                    const betCount = document.createElement('span')
+                    betCount.classList.add('betOptions')
+                    betCount.textContent = ': ' + value.count
+                    betElement.append(betLabel)
+                    betElement.append(betCount)
+                    betsBox.append(betElement)
+                }
+            });
+        })
+    }
+
+
+    function betOptionLabelListener(betLabel) {
+        let oldname = betLabel.currentTarget.dataset.oldname
+        let newname = betLabel.currentTarget.textContent
+        if (betLabel.keyCode === 13) {// 13 is the "Enter" key
+            // Cancel the default action, if needed
+            betLabel.preventDefault();
+            // Trigger the button element with a click
+            console.log('Setting ' + betLabel.currentTarget.dataset.oldname + ' to ' + betLabel.currentTarget.textContent)
+            //
+            $.post('/editBetOption', {oldname: oldname, newname: newname}, function(data, status) {
+                console.log('Editing: ' + data + '\nStatus: ' + status)
+            }).fail(function() {
+                console.log( "error editing option" );
+            })
+            betLabel.currentTarget.textContent = newname
+            betLabel.currentTarget.dataset.oldname = newname
+        }
+        if (betLabel.keyCode == 27) {  // 27 is the ESC key
+            betLabel.currentTarget.textContent = oldname
+        }
+    }
+
+    function startVoting() {
+        console.log("Starting voting")
+        socket.emit("startVoting", true)
+    }
+
+    function stopVoting() {
+        console.log("Stopping voting")
+        socket.emit("stopVoting", true)
+    }
+
+    function getVotes() {
+        let votesBox = document.getElementById('votesBox')
+        votesBox.innerHTML = ''
+        $.get('/votes', (data) => {
+            let voteHeading = document.createElement('h4')
+            voteHeading.textContent = 'Current votes';
+            votesBox.append(voteHeading)
+            Object.entries(data).forEach(([key, value]) => {
+                if (key != 'visible') {
+                    const voteElement = document.createElement('div')
+                    const voteLabel = document.createElement('span')
+                    voteLabel.classList.add('voteLabel')
+                    voteLabel.textContent = value.option
+                    voteLabel.dataset.oldname = value.option
+                    // Click this to change it to a input
+                    voteLabel.addEventListener('keyup', voteOptionLabelListener)
+                    voteLabel.setAttribute('contenteditable', 'true')
+                    const voteCount = document.createElement('span')
+                    voteCount.classList.add('voteOptions')
+                    voteCount.textContent = ': ' + value.count
+                    voteElement.append(voteLabel)
+                    voteElement.append(voteCount)
+                    const voteDelete = document.createElement('span')
+                    voteDelete.classList.add('voteDelete')
+                    voteDelete.textContent = ' x'
+                    voteElement.append(voteDelete)
+                    votesBox.append(voteElement)
+                }
+            });
+        })
+    }
+
+    function voteOptionLabelListener(voteLabel) {
+        let oldname = voteLabel.currentTarget.dataset.oldname
+        let newname = voteLabel.currentTarget.textContent
+        if (voteLabel.keyCode === 13) {// 13 is the "Enter" key
+            // Cancel the default action, if needed
+            voteLabel.preventDefault();
+            // Trigger the button element with a click
+            // document.getElementById("myBtn").click();
+            console.log('Setting ' + voteLabel.currentTarget.dataset.oldname + ' to ' + voteLabel.currentTarget.textContent)
+            //
+            $.post('/editVoteOption', {oldname: oldname, newname: newname}, function(data, status) {
+                console.log('Editing: ' + data + '\nStatus: ' + status)
+            }).fail(function() {
+                console.log( "error editing option" );
+            })
+            voteLabel.currentTarget.textContent = newname
+            voteLabel.currentTarget.dataset.oldname = newname
+        }
+        if (voteLabel.keyCode == 27) {  // 27 is the ESC key
+            voteLabel.currentTarget.textContent = oldname
+        }
+    }
+
+    socket.on('showVotes', getVotes)
+
+    socket.on('updateVotes', getVotes)
+
+    function offlineText() {
+        let message = document.getElementById('offlineText').value;
+        console.log(message);
+        socket.emit("offlineText", message);
+    }
+
+    function setViewerPassword() {
+        let pass = document.getElementById('viewerPassword').value;
+        console.log('Setting new password: '+pass);
+        socket.emit("setViewerPassword", pass);
+    }
+
+    function setShowDetails() {
+        let showTitle = document.getElementById('showTitle').value;
+        let showDescription = document.getElementById('showDescription').value;
+        let showDate = document.getElementById('showDate').value;
+        $.post('/changeShowDetails', {title: showTitle, description: showDescription, date: showDate}, function(data, status) {
+            console.log('Data: ' + data + '\nStatus: ' + status);
+        });
+    }
+
+    function getShowDetails() {
+        $.get('/getShowDetails', (data) => {
+            document.getElementById('showTitle').value = data.title;
+            document.getElementById('showDescription').value = data.description;
+            document.getElementById('showDate').value = data.date;
+        });
+    }
+
+    function addVoteOption(voteOption) {
+        console.log(voteOption);
+        $.post('/addVoteOption', voteOption);
+        document.getElementById('voteOptionName').value = '';
+    }
+
+    function addVoteListener() {
+        if (document.getElementById('voteOptionName') != null) {
+            let voteOptionName = document.getElementById('voteOptionName').value;
+            addVoteOption({ name: voteOptionName });
+        }
+    }
+</script>
+</body>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asia Society</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/theatreChat.css?v=0.0.1">
+    <script src="https://player.twitch.tv/js/embed/v1.js"></script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-SK833L1F23"></script><script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-SK833L1F23');</script>
+    
+    <script src="https://unpkg.com/jquery"></script>
+    <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+    <script src="https://kit.fontawesome.com/c82567206f.js" crossorigin="anonymous"></script>
+    <script>
+        let backend = ''
+        var socket = io(backend);
+        var userName = null;
+        var chatState = true;
+        var betState = false;
+        var loggedIn = false;
+        let dateCountdown;
+        let pollCountdown;
+        let countdownTimer;
+        let player;
+
+        function pollTimer() {
+            // Get today's date and time
+            var now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            var distance = pollCountdown - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            var timer = document.getElementById("timer");
+            //If it isn't "undefined" and it isn't "null", then it exists.
+            if (typeof (timer) != 'undefined' && timer != null) {
+                document.getElementById("timer").innerHTML = minutes + "m " + seconds + "s ";
+
+                // If the count down is finished, write some text 
+                if (distance < 0) {
+                    clearInterval(countdownTimer);
+                    document.getElementById("timer").innerHTML = "EXPIRED";
+                }
+            }
+
+        }
+
+        /* Toggle between showing and hiding the navigation menu links when the user clicks on the hamburger menu / bar icon */
+        function openHamburger() {
+            var linkBox = document.getElementById("hamburgerLinks");
+            var hamburgerLink = document.getElementById("openHamburger");
+            if (linkBox.style.display === "block") {
+                linkBox.style.display = "none";
+                hamburgerLink.textContent = '|=|'
+            } else {
+                linkBox.style.display = "block";
+                hamburgerLink.textContent = '|x|'
+            }
+        }
+
+        function loadInfoBox() {
+            infoBox.style.zIndex = 1
+            infoBox.textContent = ''
+            const infoContainer = document.createElement('div')
+            infoContainer.id = 'infoContainer'
+            const infoHeading = document.createElement('h4')
+            // HERE IS THE TITLE FOR THE INFOBOX
+            infoHeading.textContent = 'CLICK HERE TO DONATE TO CREATIVE DIGNITY'
+            infoContainer.append(infoHeading)
+            const infoText = document.createElement('p')
+            // HERE IS THE TEXT FOR THE LINK
+            infoText.innerHTML = 'click <a href="http://creativedignity.org/donate" target="_blank" rel="noopener noreferrer">here</a> to donate'
+            infoContainer.append(infoText)
+            infoBox.append(infoContainer)
+        }
+
+        let infoBox = document.createElement('div')
+        infoBox.id = 'infoBox'
+
+        function showInfoBox(arg) {
+            if (loggedIn) {
+                loadInfoBox();
+                console.log("Show info box")
+                document.body.append(infoBox)
+            
+                // pollCountdown = new Date().getTime() + arg;
+                // countdownTimer = setInterval(pollTimer, 1000);
+            }
+        }
+
+        function hideInfoBox() {
+            console.log("Hide info box")
+            // clearInterval(countdownTimer);
+            infoBox.remove()
+        }
+
+        socket.on('showInfoBox', showInfoBox);
+
+        socket.on('hideInfoBox', hideInfoBox);
+    </script>
+    <script src="/js/chat.js"></script>
+</head>
+<body style="background-color:  rgb(5, 40, 87); color: rgb(255, 195, 60);">
+    <header>
+        <div id="left-nav" class="hide">
+            <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+            <a href="javascript:void(0);" class="button" onclick="openHamburger()" id="openHamburger">|=|</a>
+            <a href="javascript:void(0);" class="button"  id="helpButton"><i class="fas fa-question"></i></a>
+            <a href="javascript:void(0);" onclick="toggleMute()" class="button" id="muteButton"><i class="fas fa-volume-up"></i></a>
+        </div>
+        <!-- Navigation links (hidden by default) -->
+        <div id="hamburgerLinks">
+            <a href="https://issuu.com/asiasocietyindiacentre/docs/2021_digital_brochure" target="_blank" rel="noopener noreferrer">Brochure</a>
+            <a href="https://asiasociety.org/india/absent-year-artist-portfolio" target="_blank" rel="noopener noreferrer">Artist Portfolios</a>
+            <a href="https://asiasociety.org/india/about-asia-society" target="_blank" rel="noopener noreferrer">About Asia Society</a>
+            <a href="https://asiasociety.org/india/become-member" target="_blank" rel="noopener noreferrer">Asia Society Membership</a>
+            <a href="http://live.harkat.in/asiaartawards.html">Log out</a>
+        </div>
+        <div id="logo">
+            
+        </div>
+    </header>
+
+    <div id="offlineBanner" class="hide">STAY TUNED, WE WILL BE BACK SOON</div>
+    <div id="twitch-embed" class="hide"></div>
+    
+    <form id="chatBox" class="hide chat-container">
+        <div id="messages"></div><div>&nbsp;</div>
+        <input type="text" name="message" id="message" placeholder="Your message here" maxlength="280" />
+        <button id="send" name="sendChat" type="submit">Send</button>
+        <button id="collapseChat" type="button" name="toggleChat"></button>
+    </form>
+
+    <div class="top-main-wrap" id="loginWrap">
+        <h3> <span id="showTitle">Title of the show</span></h3>
+        <div id="showDescription">There will be a description here.</div>
+        <div><img src="/img/asia_arts_awards.png" style="max-width:60%;"></div>
+        <form id="loginBox">
+            <h3>Time Until Show</h3>
+            <b id="showTimer"></b>
+        </form>
+        <div id="loginHelp">
+            <h3>Remember</h3>
+            <ul>
+                <li>The password is <b>artsawards</b></li>
+                <li>Your name is the username</li>
+                <li>The show is best accessed on a laptop with google chrome or ipad in landscape mode.</li>
+                <li>If your audio is not playing, try refreshing, logging in again and looking for the unmute button which comes briefly on top of the video stream. Clicking anywhere on the screen as soon as entering the theatre also helps.</li>
+                <li>Refreshing a page and logging in again almost always works.</li>
+                <li>If you have any login difficulties or need other technical assistance, you can email shows@harkat.in, whatsapp +91-8104752001 or message us on instagram @harkat.studios</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="userEnter" class="hide">* Someone entered the theatre *</div>
+
+    <div id="help" class="hide">
+        <h3>HELP</h3>
+        <p>The best solution for any help is to refresh your page. More details below:</p> 
+        <ul>
+            <li>If you are unable to see the audio stream, try refreshing and an 'unmute' button will appear on your screen. Also clicking anywhere on the screen as soon as the stream loads, helps.</li>
+            <li>The system is best accessed on google chrome and is optimised for a desktop experience. Phones and Safari will also work but might not have the same experience.</li>
+            <li>If you double click on the video, it will become full screen.</li>
+            <li>The chat can be collapsed by clicking on the speech bubble icon at the bottom and brought back with the same button.</li>
+            <li>For personal help, simply call or whatsapp +91-81047 52001 and we will quickly help you.</li>
+        </ul>
+        <p></p>
+        <a href="#" id="helpClose" class="button">x</a>
+    </div>
+
+    <script>
+        let options = {
+            width: "100%",
+            height: "100%",
+            channel: "harkatstudios",
+            // channel: "khoparzi",
+            parent: ["localhost", "live.harkat.in", "theatrechat.herokuapp.com"],
+            controls: false,
+            allowfullscreen: true,
+            autoplay: true,
+            muted: false,
+        };
+
+        function initiate() {
+            player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+            player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+            player.removeEventListener(Twitch.Player.READY, initiate);
+        }
+
+        function handleOnline() {
+            if (loggedIn) {
+                document.getElementById("twitch-embed").classList.remove('hide');
+                document.getElementById("offlineBanner").classList.add('hide');
+                player.removeEventListener(Twitch.Player.ONLINE, handleOnline);
+                player.addEventListener(Twitch.Player.OFFLINE, handleOffline);
+                player.setMuted(false);
+            }
+        }
+
+        function handleOffline() {
+            if (loggedIn) {
+                document.getElementById("twitch-embed").classList.add('hide');
+                document.getElementById("offlineBanner").classList.remove('hide');
+                player.removeEventListener(Twitch.Player.OFFLINE, handleOffline);
+                player.addEventListener(Twitch.Player.ONLINE, handleOnline);
+                player.setMuted(true);
+            }
+        }
+        
+        function toggleMute() {
+            let muteStatus = player.getMuted()
+            if (muteStatus) {
+                player.setMuted(false)
+                document.getElementById("muteButton").innerHTML = '<i class="fas fa-volume-up"></i>'
+            } else {
+                player.setMuted(true)
+                document.getElementById("muteButton").innerHTML = '<i class="fas fa-volume-mute"></i>'
+            }
+        }
+    </script>
+</body>
+</html>

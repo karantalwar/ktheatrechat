@@ -1,0 +1,146 @@
+* {
+  margin: 0;
+  padding: 0;
+  background-color: rgb(0,0,0,0);
+  color: white;
+  font-family: 'Raleway', sans-serif;
+}
+
+iframe {
+  position: absolute;
+  z-index: -2;
+}
+
+div.controls {
+  padding: 10px;
+  opacity: 0.5;
+  background-color: rgb(0,0,0,0);
+  z-index: 0;
+  position: relative;
+  float: left;
+	
+}
+
+div.playbar {
+  position: fixed;
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  grid-template-columns: 0.5fr 0.5fr 2fr 7fr 0.5fr 0.5fr 2fr;
+  grid-gap: 10px;
+  bottom: 0%;
+  left: 15%;
+  top: 50%;
+  padding: 10px;
+  margin: auto;
+  margin-bottom: 2%;
+  width: 75%;
+  height: 20vh;
+  align-self: center;
+  background-color: none;
+}
+
+.spacer {
+  border: none;
+  background-color: none;
+}
+
+button {
+  background-color: none;
+  color: white;
+  border: solid thin white;
+  padding: 10px;
+}
+
+button:hover {
+  background-color: white;
+  color: black;
+}
+
+input {
+  background-color: none;
+  color: white;
+  border: solid white thin;
+  padding: 10px;
+  height: 16px;
+}
+
+button {
+  height: 36px;
+}
+
+@media only screen and (max-width: 600px) {
+
+div.playbar {
+  position: fixed;
+  display: grid;
+  grid-template-rows: 9fr 1fr;
+  grid-template-columns: 0.5fr 0.5fr 2fr 7fr 0.5fr 0.5fr 2fr;
+  grid-gap: 10px;
+  left: 15%;
+  bottom: 10px;
+  padding: 10px;
+  margin: auto;
+  margin-bottom: 2%;
+  width: 75%;
+  height: 10vh;
+  align-self: center;
+  background-color: none;
+}
+
+}
+#live {
+  opacity:0.5;
+  margin-top:3%;
+  margin-right:3%;
+  padding: 5px;
+  border-radius: 5px;
+  float: right;
+}
+#chat, #messages {
+	/* position: fixed;
+  	height: 15%;
+	width: 28%;
+	bottom: 10%;
+	left: 40%;
+ 	 margin-left: 10px; */
+	background-color: none;
+	font-size: 14px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	color: white;
+	word-wrap: break-word;
+	white-space: pre-line;
+  	border: none;
+  	padding: 1%;
+}
+
+#messages h4 {
+  color:darkgoldenrod;
+  font-weight: 900;
+}
+
+#messages p {
+  font-style: normal;
+  font-weight: 100;
+}
+
+.hide {
+  opacity: 0;
+  transition: opacity .6s;
+  display: none;
+}
+
+#bettingBox {
+  margin: 0 auto;
+  text-align: center;
+  width: 50%;
+}
+
+#bettingBox h4 {
+  text-align: center;
+}
+
+#bettingBox div {
+  display: inline-flex;
+  padding: 10px;
+}

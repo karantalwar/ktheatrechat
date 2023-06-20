@@ -1,0 +1,116 @@
+{
+  "messages": [
+    {
+      "name": "as",
+      "message": "It sounds wonderful, but it's 100 percent accurate!"
+    },
+    {
+      "name": "as",
+      "message": "The experiences factor is short-term."
+    },
+    {
+      "name": "as",
+      "message": "Our feature set is second to none, but our strategic angel investors and user-proof use."
+    },
+    {
+      "name": "as",
+      "message": "Without macro-vertical CAE, you will lack architectures."
+    },
+    {
+      "name": "as",
+      "message": "Clicking on this link which refers to B2B Marketing awards shortlist will take you to the ability to iterate virtually."
+    },
+    {
+      "name": "as",
+      "message": "If you incentivize dynamically, you may also reintermediate magnetically."
+    },
+    {
+      "name": "bs",
+      "message": "We think we know that if you drive micro-mega-cyber-virally then you may also mesh iteravely."
+    },
+    {
+      "name": "bs",
+      "message": "Quick: do you have a plan to become proactive."
+    },
+    {
+      "name": "bs",
+      "message": "Our end-to-end feature set is second to none, but our newbie-proof administration and simple configuration."
+    },
+    {
+      "name": "bs",
+      "message": "If you transition globally, you may also mesh iteravely."
+    },
+    {
+      "name": "as",
+      "message": "A company that can streamline elegantly will (at some unspecified point in the future) be able to orchestrate correctly."
+    },
+    {
+      "name": "bs",
+      "message": "Without macro-vertical CAE, you will lack research and development."
+    },
+    {
+      "name": "bs",
+      "message": "Imagine a combination of IIS and J2EE."
+    },
+    {
+      "name": "cs",
+      "message": "Without development, you will lack cross-media CAE."
+    },
+    {
+      "name": "cs",
+      "message": "The capability to implement wirelessly leads to the ability to whiteboard without lessening our power to benchmark."
+    },
+    {
+      "name": "cs",
+      "message": "Without efficient, transparent bloatware, you will lack cross-media CAE."
+    },
+    {
+      "name": "cs",
+      "message": "A company that can incubate faithfully will (at some undefined point of time in the future) be able to transition easily."
+    }
+  ],
+  "activeUsers": [
+    {
+      "name": "as",
+      "muted": false
+    },
+    {
+      "name": "bs",
+      "muted": false
+    },
+    {
+      "name": "cs",
+      "muted": false
+    }
+  ],
+  "votes": [
+    {
+      "option": "Option 1",
+      "count": 2
+    },
+    {
+      "option": "Option 2",
+      "count": 5
+    }
+  ],
+  "voteTime": 30000,
+  "user": {},
+  "bets": {
+    "left": {
+      "option": "Ankit",
+      "count": 16
+    },
+    "right": {
+      "option": "Rashmi",
+      "count": 23
+    }
+  },
+  "betTime": 30000,
+  "count": 0,
+  "userPassword": "chat",
+  "show": {
+    "title": "",
+    "description": "",
+    "date": "June 16, 2021 20:00:00"
+  }
+}

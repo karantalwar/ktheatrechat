@@ -1,0 +1,106 @@
+
+#volumeLevel {
+	color: white;
+	font-size: 20px;
+	margin: 10px;
+}
+
+#stopChatButton {
+	margin: 10px;
+	background-color: transparent;
+	border: solid white thin;
+	color: white;
+	font-size: 15px;
+	width: 150px;
+	height: 40px;
+}
+
+#stopChatButton:hover {
+	background-color: white;
+	color: black;
+}
+
+#volumeUp {
+	margin: 10px;
+	background-color: transparent;
+	border: solid white thin;
+	color: white;
+	font-size: 15px;
+	width: 50px;
+	height: 40px;
+}
+
+#volumeUp:hover {
+	background-color: white;
+	color: black;
+}
+
+#volumeDown {
+	margin: 10px;
+	background-color: transparent;
+	border: solid white thin;
+	color: white;
+	font-size: 15px;
+	width: 50px;
+	height: 40px;
+}
+
+#volumeDown:hover {
+	background-color: white;
+	color: black;
+}
+
+#muteButton {
+	margin: 10px;
+	background-color: transparent;
+	border: solid white thin;
+	color: white;
+	font-size: 15px;
+	width: 80px;
+	height: 40px;
+}
+
+#muteButton:hover {
+	background-color: white;
+	color: black;
+}
+#clearVotes {
+	margin: 10px;
+	background-color: transparent;
+	border: solid white thin;
+	color: white;
+	font-size: 15px;
+	width: 100px;
+	height: 40px;
+}
+
+#clearVotes:hover {
+	background-color: white;
+	color: black;
+}
+#comments {
+	border: solid white thin;
+	color: white;
+	height: 70vh;
+	width: 30vw;
+	overflow: auto;
+}
+#votes {
+	border: solid white thin;
+	color: white;
+	height: 30vh;
+	overflow: auto;
+	height: 70vh;
+	width: 30vw;
+}
+
+#data {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 20px;
+}
+
+#myVideo {
+	width: 30vw;
+	height: 70vh;
+}
